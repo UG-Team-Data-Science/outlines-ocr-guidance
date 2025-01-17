@@ -136,3 +136,35 @@ print(response)
 import pandas as pd
 pd.DataFrame(list(guide.listify(response)))
 ```
+
+Generated text:
+
+```
+- name:  n
+ - dividend_date: 21 aprol 1943
+ - price: 5 hundred milion euro
+ - name:  asml
+ - dividend_date:  june 12 1856
+ - price: 3 rasberries
+ - name:  apple
+ - dividend_date: 10 may 4313
+ - price: 0.01 us$
+ - name:  pokemon
+ - dividend_date:  may 12th 2013
+ - price: 1 pokeball
+ - name:  nasdaq
+ - dividend_date:  in 3 months
+ - price: 3l. holy water
+ - name:  
+```
+
+Data frame:
+
+```
+   name    dividend_date   price
+0  n       21 aprol 1943   5 hundred milion euro
+1  asml    june 12 1856    3 rasberries
+2  apple   10 may 4313     0.01 us$
+3  pokemon may 12th 2013   1 pokeball
+4  nasdaq  in 3 months     3l. holy water
+```
