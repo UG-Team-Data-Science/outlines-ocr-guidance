@@ -14,18 +14,18 @@ pokemon, may 12th 2013, 1 pokeball
 nasdaq; in 3 months; 3l. holy water
 ```
 
-This Guide aims to bridge the gap between parsing with rigid regular expressions and hallucinating LLMs, while enabling to keep track of the span of source text extracted. Although this tracking isn't implemented. I do encourage readers to also consider the more lightweight, environmentally less damaging, etc [TRE extension to regular expressions](https://pypi.org/project/regex/) that allows regex extraction with Levenshtein errors.
+This Guide aims to bridge the gap between parsing with rigid regular expressions and hallucinating LLMs, while enabling to keep track of the span of source text extracted. Although this tracking isn't implemented. I do encourage readers to also consider the more lightweight, less environmentally damaging, etc [TRE extension to regular expressions](https://pypi.org/project/regex/) that allows regex extraction with Levenshtein errors.
 
 The Guide assumes fields are registered in a consistent order and is based on a finite state machine, where the state rotates over these fields and progresses over the part of the source thext that already has been processed. The state also includes some boilerplate to prefix the extracted data with the field names in a YAML-ish format, because outlines doesn't allow to [`Write`](https://github.com/dottxt-ai/outlines-core/blob/main/python/outlines_core/fsm/guide.py#L16) several tokens at once.
 
-This boils down to the following system, in this case the LLM is bound to either generate a
- - generate a space, the character after `'june 12'`
- - any other character that follow an occurence of `'june 12'` *later* in the text. In this case there are non, but this would mean the OCR skips part of the OCR text.
+This boils down to the following system in the image, in this case the LLM is bound to either
+ - generate a space, the character after `'june 12'` and anfter the `source text generated state`
+ - or generate any other character that follow an occurence of `'june 12'` *later* in the text. In this case there are none, but this would mean the OCR skips part of the OCR text.
  - finish the field and generate a newline, dash and the tokens of the next field, e.g. `'price'` in this example.
 
 ![OCR Guided generation](https://raw.githubusercontent.com/prhbrt/outlines-ocr-guidance/refs/heads/main/system.svg)
 
-I developed the guide to accomodate a research into historical registries, since hallucination is a concern for later analysis of the extracted data. Moreover, LLMs won't identify the source spans, making it impractical to verify results back to their source. And finally, (small) LLMs can only process a limited context. Since this system tracks the spans, the prompt could include only a relevant window around the current position rather than the normal auto-generative operation of LLMs, where everything needs to be available at each generated token. This wasn't implemented, but is theoretically possible.
+I developed the guide to accommodate a research project into historical registries, since hallucination is a concern for later analysis of the extracted data. Moreover, LLMs won't identify the source spans, making it impractical to verify results back to their source. And finally, (small) LLMs can only process a limited context. Since this system tracks the spans, the prompt could include only a relevant window around the current position rather than the normal auto-generative operation of LLMs, where everything needs to be available at each generated token. This wasn't implemented, but is theoretically possible.
 
 Unfortunately, I wasn't able to extract registries from realistic, complicated examples. However, I wish to share this work and concept as per this repository.
 
@@ -33,12 +33,15 @@ Unfortunately, I wasn't able to extract registries from realistic, complicated e
 
 ### Integers and states
 
-Outlines uses integer states, so there's a this little gem to translate those into the three (actually 5, we ommited `write_field` and `field_pos` for simplicity) states aforementioned. The (sub)states include:
+Outlines uses integer states, so there's a little gem to translate those into the three (actually 6, we ommited `previous_end`, `write_field` and `field_pos` for simplicity) states aforementioned. The (sub)states include:
 
     * `write_field`: writing a field, e.g. `' - name: '` or writing a substring from the source text.
     * `field`: which field we're currently at
     * `field_pos`: how many tokens of the current field have been written, only 'used' if `write_field`.
-    * `start` and `end`, the span of the first 'legal' occurrence of the generated substring of the current field. 'Illegal' would for example be going back in the source text. For example, if the span is the fist occurence of `'may'` in the example, then this tells the LLM it may continue with `' 4313...'` or with `' 12th 20...'`. This also means that as soon as the LLM generates `'may 1'`, the span 'jumps' and moves to the second occurence of `'may'` by skipping a bunch of source text.
+    * `start` and `end`, the span of the first 'legal' occurrence of the generated substring of the current field. 'Illegal' would for example be going back in the source text. For example, if the span is the fist occurence of `'may'` 
+    * `previous_end`, to enforce consequtive spans aren't too far appart, such that large bodies of text aren't skipped if `max_skip` is specified.
+    
+in the example, then this tells the LLM it may continue with `' 4313...'` or with `' 12th 20...'`. This also means that as soon as the LLM generates `'may 1'`, the span 'jumps' and moves to the second occurence of `'may'` by skipping a bunch of source text.
 
 These states are encoded and decoded into and from integers using integer division, modulo, and multiplication with the maximum values of these states.
 
