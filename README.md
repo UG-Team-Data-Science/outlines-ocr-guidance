@@ -41,17 +41,17 @@ Outlines uses integer states, so there's a little gem to translate those into th
     * `start` and `end`, the span of the first 'legal' occurrence of the generated substring of the current field. 'Illegal' would for example be going back in the source text. For example, if the span is the fist occurence of `'may'` 
     * `previous_end`, to enforce consequtive spans aren't too far appart, such that large bodies of text aren't skipped if `max_skip` is specified.
     
-in the example, then this tells the LLM it may continue with `' 4313...'` or with `' 12th 20...'`. This also means that as soon as the LLM generates `'may 1'`, the span 'jumps' and moves to the second occurence of `'may'` by skipping a bunch of source text.
+in the example, then this tells the LLM it may continue with `' 4313...'` or with `' 12th 20...'`. This also means that as soon as the LLM generates `'may 1'`, the span 'jumps' and moves to the second occurence of `'may'` by skipping a bunch of the source text.
 
 These states are encoded and decoded into and from integers using integer division, modulo, and multiplication with the maximum values of these states.
 
 ### Maximum span
 
-When not writing a field, the guide needs to decide which part of the source text can still be generated. After a few tokens this will usually be pretty fixed, since this sequence might not repeat itself often in the text. However, take for example 'may ', when this is generated, the guide may continue with '4313' or with '12th 2013', and hence the next tokens may be '4313' or '12'. We use a dictionary mapping all substring to the positions in the source text where they occur, up to a length of `max_span` to avoid memory explosions. A good alternative would be a substring-trie, but I've been to lazy to implement it. Not to mention, this will still have quadratic worst case memory efficiency, since it's for substring and not pre- or suffixes.
+When not writing a field, the guide needs to decide which part of the source text can still be generated. After a few tokens this will usually be pretty fixed, since this sequence might not repeat itself often in the text. However, take for example 'may ', when this is generated, the guide may continue with '4313' or with '12th 2013', and hence the next tokens may be '4313' or '12'. We use a dictionary mapping all substring to the positions in the source text where they occur, up to a length of `max_span` to avoid memory explosions. A good alternative would be a substring-trie, but I've been to lazy to implement it. Not to mention, this will still have quadratic worst case memory efficiency, since it's for substrings and not pre- or suffixes.
 
 ### Source text spans
 
-The guide could keep track of the generated spans, but doesn't. Only substrings, but not their location in the source text, are ruturned.
+The guide could keep track of the generated spans, but doesn't. Only substrings, but not their location in the source text, are returned.
 
 ## Installation
 
