@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='outlines_ocr_guidance',
-    version='0.1.0',
+    version='0.1.1',
     packages=find_packages(),
     install_requires=["outlines>=0.0.46", ],
     author='H.T. Kruitbosch',
