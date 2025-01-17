@@ -46,9 +46,9 @@ These states are encoded and decoded into and from integers using integer divisi
 
 When not writing a field, the guide needs to decide which part of the source text can still be generated. After a few tokens this will usually be pretty fixed, since this sequence might not repeat itself often in the text. However, take for example 'may ', when this is generated, the guide may continue with '4313' or with '12th 2013', and hence the next tokens may be '4313' or '12'. We use a dictionary mapping all substring to the positions in the source text where they occur, up to a length of `max_span` to avoid memory explosions. A good alternative would be a substring-trie, but I've been to lazy to implement it. Not to mention, this will still have quadratic worst case memory efficiency, since it's for substring and not pre- or suffixes.
 
-### source text spans
+### Source text spans
 
-The guide could keep track of the generated spans
+The guide could keep track of the generated spans, but doesn't. Only substrings, but not their location in the source text, are ruturned.
 
 ## Installation
 
