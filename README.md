@@ -23,7 +23,7 @@ This boils down to the following system, in this case the LLM is bound to either
  - any other character that follow an occurence of `'june 12'` *later* in the text. In this case there are non, but this would mean the OCR skips part of the OCR text.
  - finish the field and generate a newline, dash and the tokens of the next field, e.g. `'price'` in this example.
 
-![OCR Guided generation](./system.svg)
+![OCR Guided generation](https://raw.githubusercontent.com/prhbrt/outlines-ocr-guidance/refs/heads/main/system.svg)
 
 I developed the guide to accomodate a research into historical registries, since most hallucination is a big concern for later analysis of the extracted data. Moreover, LLMs won't identify the source spans, making it impractical to verify results back to their source. And finally, (small) LLMs can only process a limited context. Since this system tracks the spans, the prompt could include only a relevant window around the current position rather than the normal auto-generative operation of LLMs, where everything needs to be available at each generated token. This wasn't implemented, but is theoretically possible.
 
