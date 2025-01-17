@@ -53,8 +53,7 @@ The guide could keep track of the generated spans
 ## Installation
 
 ```bash
-#TODO: upload to pypi, this doesn't work yet.
-# pip install outlines_ocr_guides
+pip3 install outlines_ocr_guides
 ```
 
 ## Usage
@@ -96,7 +95,8 @@ import os
 os.environ['HF_TOKEN'] = "hf_allmybasearebelongtoyou"
 
 from outlines.models import Transformers
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers imp
+ort AutoTokenizer, AutoModelForCausalLM
 
 device = None
 model_name = "mistralai/Mistral-7B-Instruct-v0.2"
@@ -110,8 +110,9 @@ outlines_model = Transformers(model, tokenizer)
 # Le'sgow! We create a Guide, aware of the fields that need to be generated in order,
 # it makes sense that these fields are the same as the ones mentioned in the prompt.
 
-import pandas as pd
 from outlines.samplers import multinomial, beam_search, greedy
+from outlines.generate.api import SequenceGenerator
+from outlines_ocr_guidance import OCRGuide
 
 guide = OCRGuide(
     tokenizer=tokenizer,
@@ -126,8 +127,6 @@ guide = OCRGuide(
 # sampler = multinomial(temperature=2.)
 # sampler = beam_search(beams=5)
 sampler = greedy()
-
-
 generator = SequenceGenerator(guide, outlines_model, sampler, device)
 response = generator(payload)
 
