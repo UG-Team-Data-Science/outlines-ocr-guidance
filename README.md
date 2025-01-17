@@ -1,4 +1,4 @@
-#  OCR Guide for LLM model
+#  OCR registry guide for LLM models
 
 ## Method and Background
 
