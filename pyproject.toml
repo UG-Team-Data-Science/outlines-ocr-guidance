@@ -11,7 +11,6 @@ authors = [
 description = "outlines LLM guide to return YAML-structured spans from texts, typically OCRs from old registries."
 readme = "README.md"
 requires-python = ">=3.0"
-requires = ["outlines>=0.0.46"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
