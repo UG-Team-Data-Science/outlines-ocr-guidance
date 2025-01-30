@@ -56,7 +56,7 @@ The guide could keep track of the generated spans, but doesn't. Only substrings,
 ## Installation
 
 ```bash
-pip3 install outlines_ocr_guides
+pip3 install outlines-ocr-guidance
 ```
 
 ## Usage
