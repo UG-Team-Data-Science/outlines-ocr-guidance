@@ -98,8 +98,7 @@ import os
 os.environ['HF_TOKEN'] = "hf_allmybasearebelongtoyou"
 
 from outlines.models import Transformers
-from transformers imp
-ort AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 device = None
 model_name = "mistralai/Mistral-7B-Instruct-v0.2"
